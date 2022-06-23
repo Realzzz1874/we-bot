@@ -1,0 +1,24 @@
+{
+  "name": "we-bot",
+  "version": "1.0.0",
+  "description": "A WeChat Bot for many useful scenarios.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Realzzz1874/we-bot.git"
+  },
+  "keywords": [
+    "wechat",
+    "bot",
+    "wechaty"
+  ],
+  "author": "Realzzz1874",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Realzzz1874/we-bot/issues"
+  },
+  "homepage": "https://github.com/Realzzz1874/we-bot#readme"
+}
