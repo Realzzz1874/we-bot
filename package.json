@@ -2,10 +2,7 @@
   "name": "we-bot",
   "version": "1.0.0",
   "description": "A WeChat Bot for many useful scenarios.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "index.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Realzzz1874/we-bot.git"
@@ -20,5 +17,16 @@
   "bugs": {
     "url": "https://github.com/Realzzz1874/we-bot/issues"
   },
-  "homepage": "https://github.com/Realzzz1874/we-bot#readme"
+  "homepage": "https://github.com/Realzzz1874/we-bot#readme",
+  "scripts": {
+    "start": "ts-node-transpile-only ./index.ts"
+  },
+  "devDependencies": {
+    "file-box": "^1.4.15",
+    "qrcode-terminal": "^0.12.0",
+    "sharp": "^0.30.3",
+    "wechaty": "^1.20.2",
+    "wechaty-puppet": "^1.20.2",
+    "wechaty-puppet-padlocal": "^1.20.1"
+  }
 }
