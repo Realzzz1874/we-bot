@@ -1,47 +1,61 @@
 import { Contact, log, Message, ScanStatus, WechatyBuilder } from "wechaty";
+const path = require("path");
 // import { config } from "./config";
 
-const path = require("path");
 
+const onLogin = async (user: Contact) => {
+  log.info("Bot", `${user} login`);
+};
+
+const onLogout = async (user: Contact) => {
+  log.info("Bot", `${user} logout`);
+};
+
+const onMessage = async (message: Message) => {
+  console.log(message);
+};
+
+const onError = async (error) => {
+  log.error("Bot", "on error: ", error.stack);
+};
+
+const onScan = async (qrcode: string, status: ScanStatus) => {
+  if (status === ScanStatus.Waiting && qrcode) {
+    const qrcodeImageUrl = [
+      "https://wechaty.js.org/qrcode/",
+      encodeURIComponent(qrcode),
+    ].join("");
+
+    log.info(
+      "Bot",
+      `onScan: ${ScanStatus[status]}(${status}) - ${qrcodeImageUrl}`
+    );
+    // show qrcode on console
+    require("qrcode-terminal").generate(qrcode, { small: true });
+  } else {
+    log.info("Bot", `onScan: ${ScanStatus[status]}(${status})`);
+  }
+};
 
 const bot = WechatyBuilder.build({
   name: "Bot",
   // puppet: "wechaty-puppet-padlocal",
   // puppetOptions: { token: config.puppet_padlocal_token },
 })
-
-  .on("scan", (qrcode: string, status: ScanStatus) => {
-    if (status === ScanStatus.Waiting && qrcode) {
-      const qrcodeImageUrl = [
-        "https://wechaty.js.org/qrcode/",
-        encodeURIComponent(qrcode),
-      ].join("");
-
-      log.info(
-        "Bot",
-        `onScan: ${ScanStatus[status]}(${status}) - ${qrcodeImageUrl}`
-      );
-
-      require("qrcode-terminal").generate(qrcode, { small: true }); // show qrcode on console
-    } else {
-      log.info("Bot", `onScan: ${ScanStatus[status]}(${status})`);
-    }
+  .on("scan", async (qrcode: string, status: ScanStatus) => {
+    await onScan(qrcode, status);
   })
-
-  .on("login", (user: Contact) => {
-    log.info("Bot", `${user} login`);
+  .on("login", async (user: Contact) => {
+    await onLogin(user);
   })
-
-  .on("logout", (user: Contact) => {
-    log.info("Bot", `${user} logout`);
+  .on("logout", async (user: Contact) => {
+    await onLogout(user);
   })
-
   .on("message", async (message: Message) => {
-    console.log(message);
+    await onMessage(message);
   })
-
-  .on("error", (error) => {
-    log.error("Bot", "on error: ", error.stack);
+  .on("error", async (error) => {
+    await onError(error);
   });
 
 bot.start().then(() => {
