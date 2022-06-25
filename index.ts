@@ -1,6 +1,6 @@
 import { Contact, log, Message, ScanStatus, WechatyBuilder } from "wechaty";
 const path = require("path");
-// import { config } from "./config";
+import { config } from "./config";
 
 
 const onLogin = async (user: Contact) => {
@@ -16,7 +16,7 @@ const onMessage = async (message: Message) => {
 };
 
 const onError = async (error) => {
-  log.error("Bot", "on error: ", error.stack);
+  log.error("Bot", "on error: ", error);
 };
 
 const onScan = async (qrcode: string, status: ScanStatus) => {
@@ -39,8 +39,13 @@ const onScan = async (qrcode: string, status: ScanStatus) => {
 
 const bot = WechatyBuilder.build({
   name: "Bot",
-  // puppet: "wechaty-puppet-padlocal",
-  // puppetOptions: { token: config.puppet_padlocal_token },
+  puppet: "wechaty-puppet-service",
+  puppetOptions: {
+    tls: {
+      disable: true,
+    },
+    token: config.puppet_paimon_token
+  },
 })
   .on("scan", async (qrcode: string, status: ScanStatus) => {
     await onScan(qrcode, status);
@@ -60,6 +65,10 @@ const bot = WechatyBuilder.build({
 
 bot.start().then(() => {
   log.info("Bot started.");
+  return null;
+})
+.catch((error) => {
+  log.error("Bot", "start error: ", error.stack);
 });
 
 // ts-node-transpile-only main.ts
