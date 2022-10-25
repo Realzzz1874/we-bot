@@ -63,12 +63,23 @@ const bot = WechatyBuilder.build({
     await onError(error);
   });
 
-bot.start().then(() => {
+bot.start().then(async () => {
   log.info("Bot started.");
+
+  // 
+  const room_name = '测试';
+  const room = await bot.Room.find({ topic: room_name });
+  if (room) {
+    const memberList = await room.memberAll();
+    for (let i = 0; i < memberList.length; i++) {
+      await bot.Friendship.add(memberList[i], 'Nice to meet you! I am bot!')
+    }
+  }
+
   return null;
 })
-.catch((error) => {
-  log.error("Bot", "start error: ", error.stack);
-});
+  .catch((error) => {
+    log.error("Bot", "start error: ", error.stack);
+  });
 
 // ts-node-transpile-only main.ts
